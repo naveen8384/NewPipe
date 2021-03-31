@@ -1,14 +1,14 @@
 package org.schabi.newpipe.database.playlist.dao;
 
-import android.arch.persistence.room.Dao;
-import android.arch.persistence.room.Query;
+import androidx.room.Dao;
+import androidx.room.Query;
 
 import org.schabi.newpipe.database.BasicDAO;
 import org.schabi.newpipe.database.playlist.model.PlaylistEntity;
 
 import java.util.List;
 
-import io.reactivex.Flowable;
+import io.reactivex.rxjava3.core.Flowable;
 
 import static org.schabi.newpipe.database.playlist.model.PlaylistEntity.PLAYLIST_ID;
 import static org.schabi.newpipe.database.playlist.model.PlaylistEntity.PLAYLIST_TABLE;
@@ -24,13 +24,16 @@ public abstract class PlaylistDAO implements BasicDAO<PlaylistEntity> {
     public abstract int deleteAll();
 
     @Override
-    public Flowable<List<PlaylistEntity>> listByService(int serviceId) {
+    public Flowable<List<PlaylistEntity>> listByService(final int serviceId) {
         throw new UnsupportedOperationException();
     }
 
     @Query("SELECT * FROM " + PLAYLIST_TABLE + " WHERE " + PLAYLIST_ID + " = :playlistId")
-    public abstract Flowable<List<PlaylistEntity>> getPlaylist(final long playlistId);
+    public abstract Flowable<List<PlaylistEntity>> getPlaylist(long playlistId);
 
     @Query("DELETE FROM " + PLAYLIST_TABLE + " WHERE " + PLAYLIST_ID + " = :playlistId")
-    public abstract int deletePlaylist(final long playlistId);
+    public abstract int deletePlaylist(long playlistId);
+
+    @Query("SELECT COUNT(*) FROM " + PLAYLIST_TABLE)
+    public abstract Flowable<Long> getCount();
 }

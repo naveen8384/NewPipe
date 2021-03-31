@@ -1,19 +1,18 @@
 package org.schabi.newpipe.database.history.model;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.Index;
-import android.arch.persistence.room.PrimaryKey;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.Index;
+import androidx.room.PrimaryKey;
 
-import java.util.Date;
+import java.time.OffsetDateTime;
 
 import static org.schabi.newpipe.database.history.model.SearchHistoryEntry.SEARCH;
 
 @Entity(tableName = SearchHistoryEntry.TABLE_NAME,
         indices = {@Index(value = SEARCH)})
 public class SearchHistoryEntry {
-
     public static final String ID = "id";
     public static final String TABLE_NAME = "search_history";
     public static final String SERVICE_ID = "service_id";
@@ -25,7 +24,7 @@ public class SearchHistoryEntry {
     private long id;
 
     @ColumnInfo(name = CREATION_DATE)
-    private Date creationDate;
+    private OffsetDateTime creationDate;
 
     @ColumnInfo(name = SERVICE_ID)
     private int serviceId;
@@ -33,7 +32,8 @@ public class SearchHistoryEntry {
     @ColumnInfo(name = SEARCH)
     private String search;
 
-    public SearchHistoryEntry(Date creationDate, int serviceId, String search) {
+    public SearchHistoryEntry(final OffsetDateTime creationDate, final int serviceId,
+                              final String search) {
         this.serviceId = serviceId;
         this.creationDate = creationDate;
         this.search = search;
@@ -43,15 +43,15 @@ public class SearchHistoryEntry {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(final long id) {
         this.id = id;
     }
 
-    public Date getCreationDate() {
+    public OffsetDateTime getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(final OffsetDateTime creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -59,7 +59,7 @@ public class SearchHistoryEntry {
         return serviceId;
     }
 
-    public void setServiceId(int serviceId) {
+    public void setServiceId(final int serviceId) {
         this.serviceId = serviceId;
     }
 
@@ -67,13 +67,13 @@ public class SearchHistoryEntry {
         return search;
     }
 
-    public void setSearch(String search) {
+    public void setSearch(final String search) {
         this.search = search;
     }
 
     @Ignore
-    public boolean hasEqualValues(SearchHistoryEntry otherEntry) {
-        return getServiceId() == otherEntry.getServiceId() &&
-                getSearch().equals(otherEntry.getSearch());
+    public boolean hasEqualValues(final SearchHistoryEntry otherEntry) {
+        return getServiceId() == otherEntry.getServiceId()
+                && getSearch().equals(otherEntry.getSearch());
     }
 }

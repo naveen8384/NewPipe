@@ -1,11 +1,13 @@
 package org.schabi.newpipe.player.resolver;
 
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.util.Util;
 
@@ -42,13 +44,13 @@ public interface PlaybackResolver extends Resolver<StreamInfo, MediaSource> {
         switch (type) {
             case C.TYPE_SS:
                 return dataSource.getLiveSsMediaSourceFactory().setTag(metadata)
-                        .createMediaSource(uri);
+                        .createMediaSource(MediaItem.fromUri(uri));
             case C.TYPE_DASH:
                 return dataSource.getLiveDashMediaSourceFactory().setTag(metadata)
-                        .createMediaSource(uri);
+                        .createMediaSource(MediaItem.fromUri(uri));
             case C.TYPE_HLS:
                 return dataSource.getLiveHlsMediaSourceFactory().setTag(metadata)
-                        .createMediaSource(uri);
+                        .createMediaSource(MediaItem.fromUri(uri));
             default:
                 throw new IllegalStateException("Unsupported type: " + type);
         }
@@ -61,22 +63,22 @@ public interface PlaybackResolver extends Resolver<StreamInfo, MediaSource> {
                                          @NonNull final String overrideExtension,
                                          @NonNull final MediaSourceTag metadata) {
         final Uri uri = Uri.parse(sourceUrl);
-        @C.ContentType final int type = TextUtils.isEmpty(overrideExtension) ?
-                Util.inferContentType(uri) : Util.inferContentType("." + overrideExtension);
+        @C.ContentType final int type = TextUtils.isEmpty(overrideExtension)
+                ? Util.inferContentType(uri) : Util.inferContentType("." + overrideExtension);
 
         switch (type) {
             case C.TYPE_SS:
                 return dataSource.getLiveSsMediaSourceFactory().setTag(metadata)
-                        .createMediaSource(uri);
+                        .createMediaSource(MediaItem.fromUri(uri));
             case C.TYPE_DASH:
                 return dataSource.getDashMediaSourceFactory().setTag(metadata)
-                        .createMediaSource(uri);
+                        .createMediaSource(MediaItem.fromUri(uri));
             case C.TYPE_HLS:
                 return dataSource.getHlsMediaSourceFactory().setTag(metadata)
-                        .createMediaSource(uri);
+                        .createMediaSource(MediaItem.fromUri(uri));
             case C.TYPE_OTHER:
                 return dataSource.getExtractorMediaSourceFactory(cacheKey).setTag(metadata)
-                        .createMediaSource(uri);
+                        .createMediaSource(MediaItem.fromUri(uri));
             default:
                 throw new IllegalStateException("Unsupported type: " + type);
         }
